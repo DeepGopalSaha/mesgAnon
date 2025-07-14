@@ -7,14 +7,21 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container">
-    <div class="sidebar">
-        <h2>Chat Rooms</h2>
-        <div class="room" onclick="selectRoom('room1-python')">Python</div>
-        <div class="room" onclick="selectRoom('room2-cpp')">C++</div>
-        <div class="room" onclick="selectRoom('room3-rust')">Rust</div>
-        <div class="room" onclick="selectRoom('room4-bash')">Bash</div>
-        <div class="room" onclick="selectRoom('room5-js')">JavaScript</div>
+    <!-- Hamburger Button (for small screens only) -->
+    <button class="hamburger" onclick="toggleSidebar()">☰ Rooms</button>
+
+    <div class="container">
+        
+    <div class="sidebar-wrapper" id="sidebarWrapper">
+        <div class="sidebar">
+            <h2>Chat Rooms</h2>
+            <div class="room" onclick="selectRoomAndClose('room1-python')">Python</div>
+            <div class="room" onclick="selectRoomAndClose('room2-cpp')">C++</div>
+            <div class="room" onclick="selectRoomAndClose-rust)">Rust</div>
+            <div class="room" onclick="selectRoomAndClose('room4-bash')">Bash</div>
+            <div class="room" onclick="selectRoomAndClose('room5-js')">JavaScript</div>
+            <div class="room" onclick="selectRoomAndClose('room5-java')">Java</div>
+        </div>
     </div>
 
     <div class="chat-area">
@@ -26,7 +33,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="/static/chat.js"></script>
 </body>
