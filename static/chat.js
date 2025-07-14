@@ -9,11 +9,6 @@ function selectRoom(roomId) {
     selectedRoom = roomId;
     document.getElementById("messages").innerHTML = "";
     connectToSocket(roomId);
-
-    // Hide sidebar if on small screens
-    if (window.innerWidth <= 1000) {
-        document.getElementById("sidebarWrapper").classList.remove("active");
-    }
 }
 
 function connectToSocket(roomId) {
@@ -26,11 +21,11 @@ function connectToSocket(roomId) {
     // System messages
     socket.on("hello", (msg) => {
         appendMessage(`System: ${msg}`, "system");
-        triggerRoomCountUpdate(roomId); // Ask server to update user count
+        triggerRoomCountUpdate(roomId); // <- ask server to emit update
     });
 
-    // Incoming chat messages with ack
-    socket.on("mesg_broadcast", (msg, ack) => {
+    // Incoming chat messages
+    socket.on("mesg_broadcast", (msg) => {
         const isSystem = typeof msg === "string" && msg.startsWith("System:");
         appendMessage(msg, isSystem ? "system" : "other");
 
@@ -40,18 +35,19 @@ function connectToSocket(roomId) {
         }
     });
 
-    // System join message
-    socket.on("system_join", (msg) => {
-        appendMessage(`System: ${msg}`, "system");
-    });
-
     // Update member count
     socket.on("update_count", (count) => {
         const roomName = formatRoomName(roomId);
         document.getElementById("chatHeader").textContent = `Room: ${roomName} (${count} online)`;
     });
 
-    // Immediately fetch current count (fallback)
+    // System join message from backend
+    socket.on("system_join", (msg) => {
+        appendMessage(`System: ${msg}`, "system");
+    });
+
+
+    // Immediately fetch current count (fallback in case socket event lags)
     updateRoomHeader(roomId);
 
     // Trigger count update when disconnected
@@ -60,14 +56,14 @@ function connectToSocket(roomId) {
     });
 }
 
-// Ask backend to emit update_count
+// Ask backend to emit `update_count`
 function triggerRoomCountUpdate(roomId) {
     fetch(`/room/${roomId}/users`).catch(err => {
         console.error("Failed to trigger count update:", err);
     });
 }
 
-// Fallback fetch for header
+// Fallback UI fetch for room header
 function updateRoomHeader(roomId) {
     fetch(`/room/${roomId}/users`)
         .then(res => res.json())
@@ -115,22 +111,7 @@ function appendMessage(msg, type) {
     messages.scrollTop = messages.scrollHeight;
 }
 
-function toggleSidebar() {
-    document.getElementById("sidebarWrapper").classList.toggle("active");
-}
-
-// Hide sidebar heading on small screens
-function updateSidebarHeading() {
-    const sidebarHeading = document.querySelector(".sidebar h2");
-    if (window.innerWidth <= 1000) {
-        sidebarHeading.textContent = "Rooms"; // Hide
-    } else {
-        sidebarHeading.textContent = "Rooms"; // Restore
-    }
-}
-
 window.addEventListener("DOMContentLoaded", () => {
-    // Enter key sends message
     const input = document.getElementById("chatInput");
     input.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
@@ -138,9 +119,31 @@ window.addEventListener("DOMContentLoaded", () => {
             sendMessage();
         }
     });
-
-    // Initial heading update
-    updateSidebarHeading();
 });
 
-window.addEventListener("resize", updateSidebarHeading);
+
+
+function toggleSidebar() {
+    document.getElementById("sidebarWrapper").classList.toggle("active");
+}
+
+function selectRoomAndClose(roomId) {
+    selectRoom(roomId);
+    const wrapper = document.getElementById("sidebarWrapper");
+    wrapper.classList.remove("active");
+}
+
+
+
+    function updateSidebarHeading() {
+        const sidebarHeading = document.querySelector(".sidebar h2");
+        if (window.innerWidth <= 1000) {
+            sidebarHeading.textContent = "Rooms"; // Hide on small screens
+        } else {
+            sidebarHeading.textContent = "Rooms"; // Restore on large screens
+        }
+    }
+
+    window.addEventListener("resize", updateSidebarHeading);
+    window.addEventListener("DOMContentLoaded", updateSidebarHeading);
+
