@@ -1,0 +1,142 @@
+:root {
+    --primary: #ff66b2;
+    --secondary: #b266ff;
+    --bg: #fff0f5;
+    --text: #333;
+    --bubble-bg: #ffe6f0;
+    --bubble-bg-alt: #e5ccff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    resize: horizontal;
+    overflow: auto;
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.room {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.room:hover {
+    background-color: #a64dff;
+}
+
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: white;
+    overflow-y: hidden;
+}
+
+
+
+.chat-header {
+    padding: 12px 16px;
+    background-color: #ffe0f0;
+    color: #a000a0;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+
+
+.message {
+    padding: 10px 14px;
+    margin: 6px 12px;
+    border-radius: 20px;
+    max-width: 70%;
+    word-wrap: break-word;
+    clear: both;
+    font-size: 14px;
+}
+
+.message.you {
+    background-color: #ffe6f7;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.other {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+    margin-right: auto;
+    text-align: left;
+}
+
+.message.system {
+    background-color: #fdf0ff;
+    color: #a000a0;
+    font-style: italic;
+    text-align: center;
+    max-width: 80%;
+    margin: 10px auto;
+}
+
+.input-area {
+    display: flex;
+    margin-top: auto;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.input-area button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.input-area button:hover {
+    background-color: #ff4da6;
+}
